@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#111827">
+<title>Zach Math Quest</title>
+<style>
+:root{--ink:#172033;--paper:#fff8df;--blue:#63c5da;--green:#79c267;--gold:#f4c542;--red:#ef6a67;--purple:#9b7ede}
+*{box-sizing:border-box} body{margin:0;font-family:"Courier New",monospace;background:#8ed3e8;color:var(--ink);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:8px 8px}
+.wrap{max-width:820px;margin:auto;padding:18px}
+.pixel{image-rendering:pixelated}.panel{background:var(--paper);border:5px solid var(--ink);box-shadow:7px 7px 0 #334155;border-radius:4px;padding:18px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.logo{font-size:clamp(22px,5vw,38px);font-weight:900;text-shadow:3px 3px 0 #fff}
+.stats{display:flex;gap:8px;flex-wrap:wrap}.chip{background:#fff;border:3px solid var(--ink);padding:7px 9px;font-weight:900}
+.progress{height:24px;border:4px solid var(--ink);background:#fff;margin:12px 0;position:relative}.bar{height:100%;width:0;background:var(--green);transition:.3s}.progress span{position:absolute;inset:0;text-align:center;font-weight:900;line-height:16px}
+.hero{text-align:center;padding:24px 10px}.sprite{font-size:74px;filter:drop-shadow(5px 5px 0 rgba(0,0,0,.18))}
+h1,h2,h3{margin:8px 0 12px}.sub{font-family:Arial,sans-serif;line-height:1.5;font-size:17px}
+button{font:900 18px "Courier New",monospace;border:4px solid var(--ink);box-shadow:5px 5px 0 #334155;background:#fff;padding:13px 16px;cursor:pointer;margin:6px}
+button:active{transform:translate(4px,4px);box-shadow:1px 1px 0 #334155}.primary{background:var(--gold)}.answer{width:calc(50% - 16px);min-height:66px;background:#fff}.answer.correct{background:#a7e38d}.answer.wrong{background:#ffaaa7}
+.worlds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}.world{border:4px solid var(--ink);background:#fff;padding:12px;text-align:center;font-weight:900}.world.active{background:#ffe77a}.world.done{background:#b9e6a8}
+.qbox{text-align:center}.question{font-family:Arial,sans-serif;font-weight:800;font-size:clamp(23px,5vw,34px);min-height:80px;display:flex;align-items:center;justify-content:center;padding:10px}
+.visual{font-size:clamp(30px,7vw,52px);letter-spacing:6px;min-height:70px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.feedback{min-height:58px;font-family:Arial,sans-serif;font-size:18px;font-weight:700;padding:8px}
+.footer{text-align:center;font-family:Arial,sans-serif;font-size:13px;margin:14px;color:#26364f}
+.hidden{display:none!important}.stars{font-size:35px;letter-spacing:5px}.big{font-size:46px}
+@media(max-width:600px){.wrap{padding:10px}.panel{padding:12px;border-width:4px;box-shadow:5px 5px 0 #334155}.answer{width:100%;margin:5px 0}.worlds{grid-template-columns:1fr 1fr 1fr}.world{font-size:12px;padding:8px 3px}header{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div class="logo">🟦 ZACH MATH QUEST</div>
+ <div class="stats"><div class="chip">⭐ <span id="score">0</span></div><div class="chip">❤️ <span id="hearts">3</span></div><div class="chip">⏱ <span id="timer">15:00</span></div></div>
+</header>
+<div class="progress"><div class="bar" id="bar"></div><span id="progressText">READY</span></div>
+
+<section id="start" class="panel hero">
+ <div class="sprite">🧙‍♂️</div>
+ <h1>THE LOST MATH STARS</h1>
+ <p class="sub">Hi Zach! The Math Kingdom lost its stars.<br>Clear <b>3 worlds</b> and bring them home!</p>
+ <div class="worlds">
+  <div class="world active">🌳<br>NUMBER<br>FOREST</div>
+  <div class="world">🔷<br>PATTERN<br>CAVE</div>
+  <div class="world">🏰<br>LOGIC<br>CASTLE</div>
+ </div>
+ <p class="sub">About 15 minutes • Easy English • 12 quests</p>
+ <button class="primary" onclick="startGame()">▶ START QUEST</button>
+</section>
+
+<section id="game" class="panel hidden">
+ <div class="worlds">
+  <div id="w0" class="world active">🌳<br>NUMBER</div>
+  <div id="w1" class="world">🔷<br>PATTERN</div>
+  <div id="w2" class="world">🏰<br>LOGIC</div>
+ </div>
+ <div class="qbox">
+  <h2 id="level">QUEST 1</h2>
+  <div id="visual" class="visual"></div>
+  <div id="question" class="question"></div>
+  <div id="answers"></div>
+  <div id="feedback" class="feedback">Choose your answer!</div>
+ </div>
+</section>
+
+<section id="end" class="panel hero hidden">
+ <div class="sprite">🏆</div>
+ <h1>QUEST COMPLETE!</h1>
+ <div id="endStars" class="stars"></div>
+ <p id="result" class="sub"></p>
+ <p class="sub"><b>Math Hero Tip:</b> Mistakes help your brain grow stronger.</p>
+ <button class="primary" onclick="location.reload()">↻ PLAY AGAIN</button>
+</section>
+<div class="footer">Prototype V1 • Made for Zach • Progress stays only in this browser session.</div>
+</div>
+
+<script>
+const qs=[
+{w:0,v:"🍎 🍎 🍎",q:"How many apples?",a:["2","3","4","5"],c:1,h:"Count one by one."},
+{w:0,v:"2  4  6  ?",q:"What number comes next?",a:["7","8","9","10"],c:1,h:"Add 2 each time."},
+{w:0,v:"🐸🐸🐸🐸🐸",q:"Two frogs jump away. How many are left?",a:["2","3","4","5"],c:1,h:"5 take away 2 = 3."},
+{w:0,v:"⭐ ⭐ ⭐ ⭐",q:"You get 2 more stars. How many now?",a:["5","6","7","8"],c:1,h:"4 plus 2 = 6."},
+{w:1,v:"🔴 🔵 🔴 🔵 ?",q:"What comes next?",a:["🔴","🔵","🟢","🟡"],c:0,h:"Red, blue, red, blue..."},
+{w:1,v:"▲ ● ▲ ● ▲ ?",q:"Choose the next shape.",a:["▲","■","●","◆"],c:2,h:"Triangle and circle take turns."},
+{w:1,v:"1  3  5  7  ?",q:"What comes next?",a:["8","9","10","11"],c:1,h:"The numbers go up by 2."},
+{w:1,v:"🐱 🐱 🐶 🐱 🐱 🐶 ?",q:"What comes next?",a:["🐶","🐱","🐰","🐼"],c:1,h:"Two cats, one dog. Repeat!"},
+{w:2,v:"🐘   🐭",q:"Which animal is heavier?",a:["Mouse","Elephant","Same","I don't know"],c:1,h:"An elephant is much heavier."},
+{w:2,v:"☀️ → DAY   🌙 → ?",q:"Choose the best word.",a:["Hot","Night","Blue","Food"],c:1,h:"The moon is seen at night."},
+{w:2,v:"🟥 🟦 🟨",q:"Blue is between red and yellow. Which is in the middle?",a:["Red","Blue","Yellow","None"],c:1,h:"Look at the order."},
+{w:2,v:"🐰→🥕   🐼→🎋   🐵→?",q:"What food fits best?",a:["🍌","🥕","🎋","🧀"],c:0,h:"Monkeys are often matched with bananas."}
+];
+let i=0,score=0,hearts=3,time=900,tick=null,locked=false;
+function startGame(){document.getElementById("start").classList.add("hidden");document.getElementById("game").classList.remove("hidden");showQ();tick=setInterval(()=>{time--;drawTime();if(time<=0)finish()},1000)}
+function drawTime(){let m=Math.floor(time/60),s=time%60;document.getElementById("timer").textContent=m+":"+String(s).padStart(2,"0")}
+function showQ(){locked=false;let x=qs[i];document.getElementById("level").textContent="QUEST "+(i+1)+" / "+qs.length;document.getElementById("visual").textContent=x.v;document.getElementById("question").textContent=x.q;document.getElementById("feedback").textContent="Choose your answer!";let box=document.getElementById("answers");box.innerHTML="";x.a.forEach((t,n)=>{let b=document.createElement("button");b.className="answer";b.textContent=t;b.onclick=()=>pick(n,b);box.appendChild(b)});document.getElementById("bar").style.width=(i/qs.length*100)+"%";document.getElementById("progressText").textContent="WORLD "+(x.w+1)+" • "+(i+1)+"/"+qs.length;for(let w=0;w<3;w++){let el=document.getElementById("w"+w);el.className="world"+(w<x.w?" done":w===x.w?" active":"")}}
+function pick(n,b){if(locked)return;locked=true;let x=qs[i];if(n===x.c){score++;b.classList.add("correct");document.getElementById("feedback").textContent="✨ Great job! "+x.h}else{hearts=Math.max(0,hearts-1);b.classList.add("wrong");document.getElementById("answers").children[x.c].classList.add("correct");document.getElementById("feedback").textContent="💡 Good try! "+x.h}document.getElementById("score").textContent=score;document.getElementById("hearts").textContent=hearts;setTimeout(()=>{i++;if(i>=qs.length)finish();else showQ()},1500)}
+function finish(){if(tick)clearInterval(tick);document.getElementById("game").classList.add("hidden");document.getElementById("start").classList.add("hidden");document.getElementById("end").classList.remove("hidden");document.getElementById("bar").style.width="100%";document.getElementById("progressText").textContent="QUEST COMPLETE";let stars=score>=11?3:score>=8?2:1;document.getElementById("endStars").textContent="⭐".repeat(stars)+"☆".repeat(3-stars);document.getElementById("result").innerHTML="You saved <b>"+score+" / "+qs.length+"</b> Math Stars!<br>"+(score>=10?"Amazing thinking, Zach!":score>=7?"Nice work! Try again for 3 stars!":"Keep exploring. You are getting stronger!")}
+drawTime();
+</script>
+</body>
+</html>
