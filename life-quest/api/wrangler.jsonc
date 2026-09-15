@@ -1,0 +1,8 @@
+{
+  "name": "zach-life-quest-api",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-09-01",
+  "vars": { "ALLOWED_ORIGIN": "https://josephleehungfung.github.io" },
+  "durable_objects": { "bindings": [{ "name": "FAMILY", "class_name": "Family" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Family"] }]
+}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#172d58"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>Zach · Daily Quest</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23172d58'/%3E%3Cpath d='M7 7h18v5L14 21h11v5H7v-5l11-9H7z' fill='%23ffd54a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css"><script src="config.js" defer></script><script src="app.js" defer></script>
+</head><body>
+<main class="shell"><header><div><span class="eyebrow">ZACH'S ADVENTURE</span><h1>DAILY QUEST<span>每天進步一小步</span></h1></div><div class="badge">★ <span id="coins">—</span><small>金幣</small></div></header>
+<p id="connection" role="status">正在準備冒險…</p><div id="notice" role="alert" hidden></div>
+<section id="auth" class="panel" hidden><h2>歡迎回來！</h2><p>家長用手機登入，Zach 用 iPad 配對。</p><div class="choices"><button data-mode="child" class="gold">我是 Zach</button><button data-mode="parent">家長登入</button></div>
+<form id="authForm"><label id="credentialLabel" for="credential">iPad 配對碼</label><input id="credential" required autocomplete="off" maxlength="200"><div id="setupFields" hidden><label for="setupKey">首次啟用碼</label><input id="setupKey" type="password" autocomplete="off"></div><button class="gold" type="submit">進入遊戲</button></form><button id="setupMode" class="text">首次建立家長帳戶</button></section>
+<section id="offline" class="panel" hidden><h2>遊戲正在準備中</h2><p>完成雲端連接後，就可以讓家長手機與 iPad 同步進度。</p><p>這裏不會顯示假金幣或把未儲存的任務當作完成。</p></section>
+<div id="game" hidden><nav aria-label="遊戲頁面"><button data-tab="tasks" class="active">今日任務</button><button data-tab="shop">獎勵商店</button><button data-tab="history">冒險紀錄</button><button data-tab="parent" id="parentTab" hidden>家長管理</button></nav>
+<section id="tasks"><div class="panel journey"><div class="row"><h2>今天的小挑戰</h2><strong id="count"></strong></div><progress id="progress" max="8" value="0"></progress><p id="encourage"></p></div><div class="grid" id="taskGrid"></div></section>
+<section id="shop" hidden><div class="panel"><h2>獎勵商店</h2><p>選擇想兌換的獎勵，家長確認後才扣除金幣。</p></div><div class="grid" id="rewardGrid"></div><div id="rewardRequests"></div></section>
+<section id="history" hidden><div class="panel"><h2>每一步，都算數</h2><div id="ledger"></div></div></section>
+<section id="parent" hidden><div class="panel"><h2>待確認任務</h2><div id="reviews"></div><h2>待確認獎勵</h2><div id="redemptionReviews"></div></div>
+<div class="panel"><h2>連接 Zach 的 iPad</h2><p>產生一次性配對碼，在 iPad 選「我是 Zach」輸入。有效時間十分鐘。</p><button id="pairCode">產生配對碼</button><output id="code"></output><button id="revoke" class="text">取消所有 iPad 配對</button></div>
+<div class="panel"><h2>我們約定的獎勵</h2><p>請填入已和 Zach 約定的分數。已提交的任務保留提交時的分數；新設定適用於之後的新提交。第一版按每項任務發放金幣。</p><form id="settings"><div id="pointFields"></div><h3>可兌換獎勵</h3><div id="rewardFields"></div><button type="button" id="addReward">＋ 新增獎勵</button><button type="submit" class="gold">儲存規則</button></form></div></section>
+<footer><span id="date"></span><button id="refresh" class="text">重新整理</button><button id="logout" class="text">登出</button></footer></div></main>
+</body></html>
