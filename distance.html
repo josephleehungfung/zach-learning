@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#eff6ff">
+<title>Distance Quest | Zach's Learning Adventure</title>
+<style>
+:root{--navy:#183153;--blue:#4c8bf5;--mint:#c9f2df;--cream:#fffdf5;--gold:#ffd166}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(145deg,#c8ecff,#e8e2ff);font-family:Arial,sans-serif;color:var(--navy);display:grid;place-items:center;padding:18px}
+main{width:min(720px,100%);background:var(--cream);border:4px solid var(--navy);border-radius:24px;padding:clamp(20px,5vw,38px);box-shadow:0 10px 0 #18315330}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:clamp(20px,4vw,28px);font-weight:900}.score{background:var(--gold);padding:10px 14px;border-radius:14px;font-weight:bold}
+.track{height:16px;background:#dce6f2;border-radius:20px;margin:22px 0 8px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#4c8bf5,#68d5b0);transition:width .35s}
+.small{color:#61718a;font-weight:bold}.scene{font-size:64px;text-align:center;margin:12px 0}.q{font-size:clamp(21px,4vw,29px);line-height:1.35;font-weight:800;text-align:center;min-height:85px;display:grid;place-items:center}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.answers button,.action{border:3px solid var(--navy);border-radius:14px;background:white;padding:15px;font-size:20px;font-weight:800;color:var(--navy);cursor:pointer;box-shadow:0 4px 0 #18315325}.answers button:hover,.action:hover{background:#edf5ff}.answers button:disabled{cursor:default}.correct{background:#c9f2df!important}.wrong{background:#ffd9d4!important}
+#feedback{min-height:42px;text-align:center;font-size:18px;font-weight:bold;padding:12px 0}.center{text-align:center}.action{background:var(--gold);padding:13px 22px}.hide{display:none!important}
+@media(max-width:480px){.answers{grid-template-columns:1fr}.scene{font-size:52px}}
+</style>
+</head>
+<body><main>
+<header><div class="brand">📏 DISTANCE QUEST</div><div class="score">⭐ <span id="score">0</span></div></header>
+<div class="track"><div class="bar" id="bar"></div></div><div class="small" id="count">Ready for 5 questions!</div>
+<section id="start" class="center"><div class="scene">🧭🐾</div><h1>Near or Far?</h1><p>Help the friends compare distances. Choose the best answer!</p><button class="action" onclick="start()">Start Quest</button></section>
+<section id="quiz" class="hide"><div class="scene" id="scene"></div><div class="q" id="question"></div><div class="answers" id="answers"></div><div id="feedback"></div></section>
+<section id="finish" class="center hide"><div class="scene">🏆</div><h1>Quest Complete!</h1><p id="result"></p><button class="action" onclick="location.reload()">Play Again</button></section>
+</main>
+<script>
+const qs=[
+{e:"🚪  👧       👦",q:"Amy is 3 steps from the door. Ben is 7 steps from the door. Ben is ____ from the door than Amy.",a:["nearer","farther"],c:1},
+{e:"📦  🔴     🔵",q:"A red ball is 2 metres from the box. A blue ball is 5 metres away. The red ball is ____ to the box.",a:["nearer","farther"],c:0},
+{e:"👧  🫘       👦  🫘",q:"Lily throws a beanbag 4 metres. Tom throws his 6 metres. Tom throws it a ____ distance.",a:["longer","shorter"],c:0},
+{e:"🌳  🐱       🐶",q:"The cat is closer to the tree than the dog. The cat is ____ from the tree.",a:["nearer","farther"],c:0},
+{e:"🏁       👦   👧",q:"Sam is 8 steps from the finish line. May is 3 steps away. May is ____ from the finish line than Sam.",a:["nearer","farther"],c:0}
+];
+let i=0,score=0,lock=false;
+function sound(ok){try{let c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=ok?660:220;g.gain.value=.08;o.start();o.stop(c.currentTime+.16)}catch(e){}}
+function start(){document.getElementById('start').classList.add('hide');document.getElementById('quiz').classList.remove('hide');show()}
+function show(){lock=false;let x=qs[i];document.getElementById('count').textContent='QUESTION '+(i+1)+' OF '+qs.length;document.getElementById('bar').style.width=(i/qs.length*100)+'%';document.getElementById('scene').textContent=x.e;document.getElementById('question').textContent=x.q;document.getElementById('feedback').textContent='';let box=document.getElementById('answers');box.innerHTML='';x.a.forEach((a,n)=>{let b=document.createElement('button');b.textContent=a;b.onclick=()=>answer(n,b);box.appendChild(b)})}
+function answer(n,b){if(lock)return;lock=true;let good=n===qs[i].c;sound(good);if(good){score++;b.classList.add('correct');document.getElementById('feedback').textContent='🌟 Great job!'}else{b.classList.add('wrong');document.getElementById('answers').children[qs[i].c].classList.add('correct');document.getElementById('feedback').textContent='💡 Good try! Look at the distance again.'}document.getElementById('score').textContent=score;[...document.querySelectorAll('.answers button')].forEach(x=>x.disabled=true);setTimeout(()=>{i++;if(i===qs.length)finish();else show()},1100)}
+function finish(){document.getElementById('quiz').classList.add('hide');document.getElementById('finish').classList.remove('hide');document.getElementById('bar').style.width='100%';document.getElementById('count').textContent='QUEST COMPLETE';document.getElementById('result').textContent='You got '+score+' out of 5 correct! '+(score===5?'Fantastic work!': 'Keep practising — you are getting better!')}
+</script></body></html>
